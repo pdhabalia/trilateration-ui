@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, signal } from '@angular/core'
-import { FormsModule } from '@angular/forms'
+import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms'
 import { GoogleMap, MapAdvancedMarker } from '@angular/google-maps'
 import { MatButtonModule } from '@angular/material/button'
 import { MatCardModule } from '@angular/material/card'
@@ -15,6 +15,7 @@ import { PhoneLocation } from '../../model/cell-location.model'
   imports: [
     MatCardModule,
     FormsModule,
+    ReactiveFormsModule,
     GoogleMap,
     MapAdvancedMarker,
     CommonModule,
@@ -41,6 +42,47 @@ export class Location {
     address: ''
   }
 
+  phoneInfo : PhoneLocation | undefined;
+
+  form = new FormGroup( {
+    phoneNumber : new FormControl<string>('', 
+      [
+        Validators.required, 
+        Validators.pattern(/^\d+$/)
+      ]
+    ),
+    mcc : new FormControl<number | null>(null, 
+      [
+        Validators.required, 
+        Validators.min(1), 
+        Validators.pattern(/^\d+$/)
+      ]
+    ),
+    
+    mnc : new FormControl<number | null>(null, 
+      [
+        Validators.required, 
+        Validators.min(1), 
+        Validators.pattern(/^\d+$/)
+      ]
+    ),
+    lac : new FormControl<number | null>(null, 
+      [
+        Validators.required, 
+        Validators.min(1), 
+        Validators.pattern(/^\d+$/)
+      ]
+    ),
+    
+    cid : new FormControl<number | null>(null, 
+      [
+        Validators.required, 
+        Validators.min(1), 
+        Validators.pattern(/^\d+$/)
+      ]
+    )
+  });
+
   markerPosition: google.maps.LatLngLiteral = { lat: 0, lng: 0 }
 
   options: google.maps.MapOptions = {
@@ -54,10 +96,15 @@ export class Location {
   async findLocation () {
     console.log('calling find location');
     this.loading.set(true);
-    const data = await this.locationService.getLiveLocation(this.cellInfo);
-    this.markerPosition.lat = Number(data.latitude);
-    this.markerPosition.lng = Number(data.longitude);
-    this.loading.set(false);
+
+    if(this.form.valid){
+      let phoneInfo = this.form.value as PhoneLocation;
+      console.log("CellInfo " , phoneInfo);
+      const data = await this.locationService.getLiveLocation(phoneInfo);
+      this.markerPosition.lat = Number(data.latitude);
+      this.markerPosition.lng = Number(data.longitude);
+    }
+     this.loading.set(false);
   }
 }
 

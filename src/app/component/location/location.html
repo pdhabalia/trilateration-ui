@@ -15,15 +15,17 @@
       <mat-label>Find Cell Tower Location</mat-label>
     </div>
     
-    <form (ngSubmit)="findLocation()" #cellForm="ngForm" class="example-form">
+    <!-- <form (ngSubmit)="findLocation()" #cellForm="ngForm" class="example-form"> -->
+      <form [formGroup]="form" (submit)="findLocation()" ngNativeValidate> 
       <div>
         <mat-form-field class="example-form-field">
           <mat-label>Phone Number</mat-label>
           <input
             matInput
-            type="string"
+            type="number"
             required
-            [(ngModel)]="cellInfo.phoneNumber"
+            #phoneNumber
+            formControlName="phoneNumber"
             name="phoneNumber"
           />
         </mat-form-field>
@@ -35,7 +37,7 @@
             matInput
             type="number"
             required
-            [(ngModel)]="cellInfo.mcc"
+            formControlName="mcc"
             name="mcc"
           />
         </mat-form-field>
@@ -48,7 +50,7 @@
             matInput
             type="number"
             required
-            [(ngModel)]="cellInfo.mnc"
+           formControlName="mnc"
             name="mnc"
           />
         </mat-form-field>
@@ -61,7 +63,7 @@
             matInput
             type="number"
             required
-            [(ngModel)]="cellInfo.lac"
+            formControlName="lac"
             name="lac"
           />
         </mat-form-field>
@@ -74,7 +76,7 @@
             matInput
             type="number"
             required
-            [(ngModel)]="cellInfo.cid"
+           formControlName="cid"
             name="cid"
           />
         </mat-form-field>
