@@ -67,7 +67,8 @@ export class History implements OnInit {
   }
 
   async onSelectionChange (event: MatSelectChange) {
-
+    this.phoneLocations.length = 0;
+    
     console.log("Fetching location for phone number " + event.value);
     this.loading.set(true);
 

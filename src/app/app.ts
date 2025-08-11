@@ -8,7 +8,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Navbar } from "./component/navbar/navbar";
-import { Location } from "./component/location/location";
 @Component({
   selector: 'app-root',
   imports: [

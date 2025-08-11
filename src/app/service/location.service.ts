@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
 import { CellInfo, PhoneLocation } from '../model/cell-location.model'
 import { firstValueFrom } from 'rxjs'
 
@@ -10,7 +9,12 @@ import { firstValueFrom } from 'rxjs'
 export class LocationService {
   private apiUrl = 'http://localhost:8081/imei' // your backend URL
 
-  private httpOptions: any
+  private httpOptions = {
+    headers : {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  };
 
   constructor (private http: HttpClient) {}
 
@@ -18,7 +22,7 @@ export class LocationService {
     const url = `${this.apiUrl}/live-location`;
     try {
       return await firstValueFrom(
-        this.http.post<PhoneLocation>(url, cellInfo)
+        this.http.post<PhoneLocation>(url, cellInfo, this.httpOptions)
       );
     } catch (error) {
       console.log(
@@ -32,7 +36,7 @@ export class LocationService {
   async getPhoneLocation (phoneNumber: string): Promise<PhoneLocation[]> {
     const url = `${this.apiUrl}/locations/${phoneNumber}`;
     try {
-      return await firstValueFrom(this.http.get<PhoneLocation[]>(url));
+      return await firstValueFrom(this.http.get<PhoneLocation[]>(url, this.httpOptions));
     } catch (error) {
       console.log(
         'Could not retrieve phone location for number ' + phoneNumber,
