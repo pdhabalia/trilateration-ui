@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, resource, signal } from '@angular/core'
 import { FormControl, ReactiveFormsModule } from '@angular/forms'
 import { GoogleMap, MapAdvancedMarker } from '@angular/google-maps'
 import { MatButtonModule } from '@angular/material/button'
@@ -17,6 +17,8 @@ import {
   MatOption
 } from '@angular/material/select'
 import { LocationService } from '../../service/location.service'
+import { delay } from 'rxjs'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 @Component({
   selector: 'app-history',
@@ -32,7 +34,8 @@ import { LocationService } from '../../service/location.service'
     MatInputModule,
     MatSelect,
     MatOption,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './history.html',
   styleUrl: './history.scss'
@@ -40,6 +43,13 @@ import { LocationService } from '../../service/location.service'
 export class History implements OnInit {
   phoneNumbers: string[] = []
   phoneLocations: PhoneLocation[] = []
+
+  loading = signal(false);
+
+  phoneNumberResource = resource({ 
+    loader: () => this.locationService.getPhoneNumbers(),
+  });
+
 
   options: google.maps.MapOptions = {
     mapId: 'Cell-Location-Id',
@@ -49,14 +59,19 @@ export class History implements OnInit {
 
   constructor (private locationService: LocationService) {}
 
-  ngOnInit (): void {
-    this.locationService.getPhoneNumbers().subscribe(data => {
-      this.phoneNumbers = data;
-    });
+  async ngOnInit () {
+    this.loading.set(true);
+    const data = await this.locationService.getPhoneNumbers();
+    this.phoneNumbers = data;
+    this.loading.set(false);
   }
 
-  onSelectionChange (event: MatSelectChange) {
-    this.locationService.getPhoneLocation(event.value).subscribe(data => {
+  async onSelectionChange (event: MatSelectChange) {
+
+    console.log("Fetching location for phone number " + event.value);
+    this.loading.set(true);
+
+    const data = await this.locationService.getPhoneLocation(event.value);
       data.forEach(element => {
         this.phoneLocations.push({
           phoneNumber: element.phoneNumber,
@@ -70,7 +85,8 @@ export class History implements OnInit {
           address: element.address
         });
       });
-    });
+
+      this.loading.set(false);
   }
 
 }

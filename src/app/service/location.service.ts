@@ -1,42 +1,54 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { CellInfo, LocationResponse, PhoneLocation } from '../model/cell-location.model';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs'
+import { CellInfo, PhoneLocation } from '../model/cell-location.model'
+import { firstValueFrom } from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-  
-  private apiUrl = 'http://localhost:8081/imei'; // your backend URL
-  
-  private httpOptions: any;
-  
-  constructor(private http: HttpClient) {
-    this.httpOptions = {
-      observe: 'body', 
-      responseType: 'json',
-      /*
-      headers: new HttpHeaders({ 
-        'Access-Control-Allow-Origin':'*'
-      })
-      */
-      headers:{'Access-Control-Allow-Origin':'*'}
-    };
-  }
+  private apiUrl = 'http://localhost:8081/imei' // your backend URL
 
-  getLiveLocation(cellInfo: CellInfo): Observable<PhoneLocation> {
+  private httpOptions: any
+
+  constructor (private http: HttpClient) {}
+
+  async getLiveLocation (cellInfo: PhoneLocation): Promise<PhoneLocation> {
     const url = `${this.apiUrl}/live-location`;
-    return this.http.post<PhoneLocation>(url, cellInfo);
+    try {
+      return await firstValueFrom(
+        this.http.post<PhoneLocation>(url, cellInfo)
+      );
+    } catch (error) {
+      console.log(
+        'Error fetching live location for ' + cellInfo.phoneNumber,
+        error
+      );
+      throw error;
+    }
   }
 
-  getPhoneLocation(phoneNumber : string) : Observable<PhoneLocation[]>{
+  async getPhoneLocation (phoneNumber: string): Promise<PhoneLocation[]> {
     const url = `${this.apiUrl}/locations/${phoneNumber}`;
-    return this.http.get<PhoneLocation[]>(url);
+    try {
+      return await firstValueFrom(this.http.get<PhoneLocation[]>(url));
+    } catch (error) {
+      console.log(
+        'Could not retrieve phone location for number ' + phoneNumber,
+        error
+      );
+      throw error;
+    }
   }
 
-  getPhoneNumbers() : Observable<string[]>{
+  async getPhoneNumbers (): Promise<string[]> {
     const url = `${this.apiUrl}/phones`;
-    return this.http.get<string[]>(url);
+    try {
+      return await firstValueFrom(this.http.get<string[]>(url));
+    } catch (error) {
+      console.log('Could not fetch the phone numbers', error);
+      throw error;
+    }
   }
 }

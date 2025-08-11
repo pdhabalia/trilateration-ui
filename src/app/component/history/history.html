@@ -34,4 +34,11 @@
         </google-map>
       </mat-card-content>
     </mat-card>
+
+     @if (loading()) {
+      <div>
+        <mat-progress-spinner mode="indeterminate" diameter="50" ></mat-progress-spinner>
+      </div>
+    }
+
 </div>

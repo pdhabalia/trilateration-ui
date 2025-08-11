@@ -71,6 +71,9 @@
             },
             "development": {
               "buildTarget": "trilateration-ui:build:development"
+            },
+            "options" : {
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

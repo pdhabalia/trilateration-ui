@@ -1,14 +1,14 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { GoogleMap, MapAdvancedMarker } from '@angular/google-maps';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { LocationService } from '../../service/location.service';
-import { CellInfo, PhoneLocation} from '../../model/cell-location.model';
+import { CommonModule } from '@angular/common'
+import { Component, signal } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { GoogleMap, MapAdvancedMarker } from '@angular/google-maps'
+import { MatButtonModule } from '@angular/material/button'
+import { MatCardModule } from '@angular/material/card'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatIconModule } from '@angular/material/icon'
+import { MatInputModule } from '@angular/material/input'
+import { LocationService } from '../../service/location.service'
+import { PhoneLocation } from '../../model/cell-location.model'
 
 @Component({
   selector: 'app-location',
@@ -26,36 +26,38 @@ import { CellInfo, PhoneLocation} from '../../model/cell-location.model';
   templateUrl: './location.html',
   styleUrl: './location.scss'
 })
-
 export class Location {
- cellInfo: PhoneLocation = {
-  phoneNumber: '',
-  mcc: 0,
-  mnc: 0,
-  lac: 0,
-  cid: 0,
-  latitude: 0,
-  longitude: 0,
-  locationDateTime: new Date(),
-  address: ''
- }
-  markerPosition: google.maps.LatLngLiteral = {lat: 0, lng:0};
-  
+  loading = signal(false);
+
+  cellInfo: PhoneLocation = {
+    phoneNumber: '',
+    mcc: 0,
+    mnc: 0,
+    lac: 0,
+    cid: 0,
+    latitude: 0,
+    longitude: 0,
+    locationDateTime: new Date(),
+    address: ''
+  }
+
+  markerPosition: google.maps.LatLngLiteral = { lat: 0, lng: 0 }
+
   options: google.maps.MapOptions = {
-    mapId: "Cell-Location-Id",
-    center: {lat: 0, lng: 0},
+    mapId: 'Cell-Location-Id',
+    center: { lat: 0, lng: 0 },
     zoom: 3
   }
 
   constructor (private locationService: LocationService) {}
 
-  findLocation () {
-    console.log('calling find location')
-    this.locationService.getLiveLocation(this.cellInfo).subscribe(data => {
-      console.log('data : ', data);
-      this.markerPosition.lat = Number(data.latitude);
-      this.markerPosition.lng = Number(data.longitude);
-    });
+  async findLocation () {
+    console.log('calling find location');
+    this.loading.set(true);
+    const data = await this.locationService.getLiveLocation(this.cellInfo);
+    this.markerPosition.lat = Number(data.latitude);
+    this.markerPosition.lng = Number(data.longitude);
+    this.loading.set(false);
   }
-
 }
+
