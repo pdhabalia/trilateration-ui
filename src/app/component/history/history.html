@@ -1,0 +1,37 @@
+<div>
+  <mat-form-field>
+    <mat-label>Select Phone Numbers</mat-label>
+    <mat-select (selectionChange)="onSelectionChange($event)">
+      <!-- <mat-select-trigger>
+        {{phoneNumbers?.[0] || ''}}
+        @if ((phoneNumbers?.length || 0) > 1) {
+        <span class="example-additional-selection">
+          (+{{ (phoneNumbers?.length || 0) - 1 }}
+          {{ phoneNumbers?.length === 2 ? 'other' : 'others' }})
+        </span>
+        }
+      </mat-select-trigger> -->
+      @for (phoneNumber of phoneNumbers; track phoneNumber) {
+        <mat-option [value]="phoneNumber">{{ phoneNumber}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <div style="margin-top: 20px; width: 80%;">
+    <mat-card class="example-card" appearance="outlined">
+      <mat-card-content>
+        <google-map 
+        height="500px"
+        width="100%"
+        [options]="options">
+        @for(marker of phoneLocations; track marker){
+          <map-advanced-marker #markElem="mapAdvancedMarker" 
+          [position]="{lat: marker.latitude, lng: marker.longitude}"
+          matTooltip=`${maker.address}`
+          ></map-advanced-marker>
+        } @empty{
+          <map-advanced-marker #markElem="mapAdvancedMarker" [position]="{lat: 0, lng: 0}"></map-advanced-marker>
+        }
+        </google-map>
+      </mat-card-content>
+    </mat-card>
+</div>
