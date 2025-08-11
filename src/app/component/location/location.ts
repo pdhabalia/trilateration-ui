@@ -28,7 +28,17 @@ import { CellInfo, PhoneLocation} from '../../model/cell-location.model';
 })
 
 export class Location {
-  cellInfo: CellInfo = { mcc: 404, mnc: 5, lac: 59929, cid: 227936287 }
+ cellInfo: PhoneLocation = {
+  phoneNumber: '',
+  mcc: 0,
+  mnc: 0,
+  lac: 0,
+  cid: 0,
+  latitude: 0,
+  longitude: 0,
+  locationDateTime: new Date(),
+  address: ''
+ }
   markerPosition: google.maps.LatLngLiteral = {lat: 0, lng:0};
   
   options: google.maps.MapOptions = {

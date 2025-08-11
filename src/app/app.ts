@@ -13,7 +13,6 @@ import { Location } from "./component/location/location";
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    RouterLink,
     Header,
     MatButtonModule,
     MatIconModule,
@@ -21,8 +20,7 @@ import { Location } from "./component/location/location";
     MatSidenavModule,
     MatToolbarModule,
     Footer,
-    Navbar,
-    Location
+    Navbar
 ],
   templateUrl: './app.html',
   styleUrl: './app.scss'

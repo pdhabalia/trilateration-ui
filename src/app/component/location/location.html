@@ -18,6 +18,18 @@
     <form (ngSubmit)="findLocation()" #cellForm="ngForm" class="example-form">
       <div>
         <mat-form-field class="example-form-field">
+          <mat-label>Phone Number</mat-label>
+          <input
+            matInput
+            type="string"
+            required
+            [(ngModel)]="cellInfo.phoneNumber"
+            name="phoneNumber"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="example-form-field">
           <mat-label>MCC</mat-label>
           <input
             matInput
