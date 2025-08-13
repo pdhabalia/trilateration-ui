@@ -29,3 +29,7 @@ export interface PhoneLocation {
   locationDateTime: Date
   address: string
 }
+
+export interface PhoneNumbers {
+  phoneNumbers: string[];
+}

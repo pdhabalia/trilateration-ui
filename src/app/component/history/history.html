@@ -2,15 +2,6 @@
   <mat-form-field>
     <mat-label>Select Phone Numbers</mat-label>
     <mat-select (selectionChange)="onSelectionChange($event)">
-      <!-- <mat-select-trigger>
-        {{phoneNumbers?.[0] || ''}}
-        @if ((phoneNumbers?.length || 0) > 1) {
-        <span class="example-additional-selection">
-          (+{{ (phoneNumbers?.length || 0) - 1 }}
-          {{ phoneNumbers?.length === 2 ? 'other' : 'others' }})
-        </span>
-        }
-      </mat-select-trigger> -->
       @for (phoneNumber of phoneNumbers; track phoneNumber) {
         <mat-option [value]="phoneNumber">{{ phoneNumber}}</mat-option>
       }

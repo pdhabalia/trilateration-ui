@@ -1,6 +1,6 @@
 {
   "/imei/*": {
-    "target": "http://localhost:8081",
+    "target": "http://ezekievci.com:8081",
     "secure": false,
     "changeOrigin": true
   }

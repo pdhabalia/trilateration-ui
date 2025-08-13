@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { CellInfo, PhoneLocation } from '../model/cell-location.model'
+import { CellInfo, PhoneLocation, PhoneNumbers } from '../model/cell-location.model'
 import { firstValueFrom } from 'rxjs'
+import { environment } from '../../environments/environment'
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-  private apiUrl = 'http://localhost:8081/imei' // your backend URL
+  //private apiUrl = 'https://ezekievci.com/imei' // your backend URL
+  private apiUrl : string |undefined;
 
   private httpOptions = {
     headers : {
@@ -16,10 +18,13 @@ export class LocationService {
     }
   };
 
-  constructor (private http: HttpClient) {}
+  constructor (private http: HttpClient) {
+    this.apiUrl = environment.apiBaseUrl;
+    console.log("API URL : " + this.apiUrl);
+  }
 
   async getLiveLocation (cellInfo: PhoneLocation): Promise<PhoneLocation> {
-    const url = `${this.apiUrl}/live-location`;
+    const url = `${this.apiUrl}/phone-location`;
     try {
       return await firstValueFrom(
         this.http.post<PhoneLocation>(url, cellInfo, this.httpOptions)
@@ -46,10 +51,11 @@ export class LocationService {
     }
   }
 
-  async getPhoneNumbers (): Promise<string[]> {
-    const url = `${this.apiUrl}/phones`;
+  async getPhoneNumbers (): Promise<PhoneNumbers> {
+    const url = `${this.apiUrl}/phoneNumbers`;
+    console.log("URL " , url);
     try {
-      return await firstValueFrom(this.http.get<string[]>(url));
+      return await firstValueFrom(this.http.get<PhoneNumbers>(url));
     } catch (error) {
       console.log('Could not fetch the phone numbers', error);
       throw error;

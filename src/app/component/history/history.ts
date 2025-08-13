@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatIconModule } from '@angular/material/icon'
 import { MatInputModule } from '@angular/material/input'
-import {PhoneLocation} from '../../model/cell-location.model'
+import {PhoneLocation, PhoneNumbers} from '../../model/cell-location.model'
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {
   MatSelectModule,
@@ -61,14 +61,14 @@ export class History implements OnInit {
 
   async ngOnInit () {
     this.loading.set(true);
-    const data = await this.locationService.getPhoneNumbers();
-    this.phoneNumbers = data;
+    const data : PhoneNumbers = await this.locationService.getPhoneNumbers();
+    this.phoneNumbers = data.phoneNumbers;
     this.loading.set(false);
   }
 
   async onSelectionChange (event: MatSelectChange) {
     this.phoneLocations.length = 0;
-    
+
     console.log("Fetching location for phone number " + event.value);
     this.loading.set(true);
 
