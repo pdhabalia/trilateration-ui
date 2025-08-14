@@ -45,8 +45,8 @@ export class Login {
 
   form = new FormGroup({
     username: new FormControl<string>('', [
-      Validators.required,
-      Validators.email
+      Validators.required//,
+     // Validators.email
     ]),
     password: new FormControl<string | null>(null, [Validators.required])
   })
