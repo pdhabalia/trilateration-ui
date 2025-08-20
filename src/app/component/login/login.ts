@@ -64,9 +64,13 @@ export class Login {
 
       username = username == null ? '' : username;
       password = password == null ? '' : password;
-      const user: User = await this.authenticationService.login(username, password);
 
-      this.authenticationService.setToken(user.token)
+      try{
+         await this.authenticationService.login(username, password);
+      } catch(error){
+        this.isLoginValid = false;
+        return;
+      }
       this.router.navigate(['/history'])
     }
   }

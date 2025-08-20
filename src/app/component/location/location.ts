@@ -1,7 +1,17 @@
 import { CommonModule } from '@angular/common'
-import { Component, signal } from '@angular/core'
-import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms'
-import { GoogleMap, MapAdvancedMarker } from '@angular/google-maps'
+import { Component, signal, ViewChild } from '@angular/core'
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  Validators,
+  ReactiveFormsModule
+} from '@angular/forms'
+import {
+  GoogleMap,
+  MapAdvancedMarker,
+  MapInfoWindow
+} from '@angular/google-maps'
 import { MatButtonModule } from '@angular/material/button'
 import { MatCardModule } from '@angular/material/card'
 import { MatFormFieldModule } from '@angular/material/form-field'
@@ -18,6 +28,7 @@ import { PhoneLocation } from '../../model/cell-location.model'
     ReactiveFormsModule,
     GoogleMap,
     MapAdvancedMarker,
+    MapInfoWindow,
     CommonModule,
     MatButtonModule,
     MatIconModule,
@@ -28,7 +39,19 @@ import { PhoneLocation } from '../../model/cell-location.model'
   styleUrl: './location.scss'
 })
 export class Location {
-  loading = signal(false);
+  @ViewChild('infoWindow') infoWindow!: MapInfoWindow
+
+  /** Google Map releated properties */
+  infoWindowVisible = false
+  selectedMarkerData: PhoneLocation | null = null
+  markerPosition: google.maps.LatLngLiteral = { lat: 0, lng: 0 }
+  options: google.maps.MapOptions = {
+    mapId: 'Cell-Location-Id',
+    center: { lat: 0, lng: 0 },
+    zoom: 3
+  }
+
+  loading = signal(false)
 
   cellInfo: PhoneLocation = {
     phoneNumber: '',
@@ -42,69 +65,59 @@ export class Location {
     address: ''
   }
 
-  phoneInfo : PhoneLocation | undefined;
+  phoneInfo: PhoneLocation | undefined
 
-  form = new FormGroup( {
-    phoneNumber : new FormControl<string>('', 
-      [
-        Validators.required, 
-        Validators.pattern(/^\d+$/)
-      ]
-    ),
-    mcc : new FormControl<number | null>(null, 
-      [
-        Validators.required, 
-        Validators.min(1), 
-        Validators.pattern(/^\d+$/)
-      ]
-    ),
-    
-    mnc : new FormControl<number | null>(null, 
-      [
-        Validators.required, 
-        Validators.min(1), 
-        Validators.pattern(/^\d+$/)
-      ]
-    ),
-    lac : new FormControl<number | null>(null, 
-      [
-        Validators.required, 
-        Validators.min(1), 
-        Validators.pattern(/^\d+$/)
-      ]
-    ),
-    
-    cid : new FormControl<number | null>(null, 
-      [
-        Validators.required, 
-        Validators.min(1), 
-        Validators.pattern(/^\d+$/)
-      ]
-    )
-  });
+  form = new FormGroup({
+    phoneNumber: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(/^\d+$/)
+    ]),
+    mcc: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern(/^\d+$/)
+    ]),
 
-  markerPosition: google.maps.LatLngLiteral = { lat: 0, lng: 0 }
+    mnc: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern(/^\d+$/)
+    ]),
+    lac: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern(/^\d+$/)
+    ]),
 
-  options: google.maps.MapOptions = {
-    mapId: 'Cell-Location-Id',
-    center: { lat: 0, lng: 0 },
-    zoom: 3
-  }
+    cid: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(1),
+      Validators.pattern(/^\d+$/)
+    ])
+  })
 
   constructor (private locationService: LocationService) {}
 
   async findLocation () {
-    console.log('calling find location');
-    this.loading.set(true);
+    this.loading.set(true)
 
-    if(this.form.valid){
-      let phoneInfo = this.form.value as PhoneLocation;
-      console.log("CellInfo " , phoneInfo);
-      const data = await this.locationService.getLiveLocation(phoneInfo);
-      this.markerPosition.lat = Number(data.latitude);
-      this.markerPosition.lng = Number(data.longitude);
+    if (this.form.valid) {
+      let phoneInfo = this.form.value as PhoneLocation
+      this.cellInfo = await this.locationService.getLiveLocation(phoneInfo)
+      this.markerPosition.lat = Number(this.cellInfo.latitude)
+      this.markerPosition.lng = Number(this.cellInfo.longitude)
     }
-     this.loading.set(false);
+    this.loading.set(false)
+  }
+
+  showAddress (markerData: PhoneLocation, marker: MapAdvancedMarker) {
+    // Set the selected marker data
+    this.selectedMarkerData = markerData
+
+    if (this.infoWindow) {
+      // Open the info window anchored to the clicked marker
+      this.infoWindow.open(marker)
+      this.infoWindowVisible = true
+    }
   }
 }
-

@@ -7,6 +7,14 @@
       }
     </mat-select>
   </mat-form-field>
+
+  @if (phoneLocations.length > 1) {
+    <button mat-raised-button color="primary" (click)="resetMapView()"
+            matTooltip="Show all markers on map" style="margin-left: 16px;">
+      <mat-icon>center_focus_strong</mat-icon>
+      Center Map
+    </button>
+  }
   <div style="margin-top: 20px; width: 80%;">
     <mat-card class="example-card" appearance="outlined">
       <mat-card-content>
@@ -14,14 +22,24 @@
         height="500px"
         width="100%"
         [options]="options">
-        @for(marker of phoneLocations; track marker){
-          <map-advanced-marker #markElem="mapAdvancedMarker" 
+        @for(marker of phoneLocations; track marker; let i = $index){
+          <map-advanced-marker #markElem="mapAdvancedMarker"
           [position]="{lat: marker.latitude, lng: marker.longitude}"
-          matTooltip=`${maker.address}`
+          (mapClick)="showAddress(marker, markElem)"
           ></map-advanced-marker>
         } @empty{
           <map-advanced-marker #markElem="mapAdvancedMarker" [position]="{lat: 0, lng: 0}"></map-advanced-marker>
         }
+
+        <!-- Single info window outside the loop -->
+        <map-info-window
+          #infoWindow="mapInfoWindow"
+          (closeclick)="infoWindowVisible = false">
+          <div>
+            <h2>{{selectedMarkerData?.address || 'Location'}}</h2>
+            <p>Lat: {{selectedMarkerData?.latitude}}, Lng: {{selectedMarkerData?.longitude}}</p>
+          </div>
+        </map-info-window>
         </google-map>
       </mat-card-content>
     </mat-card>

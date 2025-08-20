@@ -6,17 +6,18 @@
 </script> -->
 
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaCWFWmJtjh3A6G9bo3PI7a3AyIKBlcf8&loading=async&libraries=maps&v=beta" defer>
-</script>
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaCWFWmJtjh3A6G9bo3PI7a3AyIKBlcf8&loading=async&libraries=maps&v=beta"
+  defer
+></script>
 
 <div class="main-container">
   <div class="form-container">
     <div>
       <mat-label>Find Cell Tower Location</mat-label>
     </div>
-    
+
     <!-- <form (ngSubmit)="findLocation()" #cellForm="ngForm" class="example-form"> -->
-      <form [formGroup]="form" (submit)="findLocation()" ngNativeValidate> 
+    <form [formGroup]="form" (submit)="findLocation()" ngNativeValidate>
       <div>
         <mat-form-field class="example-form-field">
           <mat-label>Phone Number</mat-label>
@@ -50,7 +51,7 @@
             matInput
             type="number"
             required
-           formControlName="mnc"
+            formControlName="mnc"
             name="mnc"
           />
         </mat-form-field>
@@ -76,7 +77,7 @@
             matInput
             type="number"
             required
-           formControlName="cid"
+            formControlName="cid"
             name="cid"
           />
         </mat-form-field>
@@ -88,19 +89,36 @@
     </form>
   </div>
 
-  <div style="margin-top: 20px; width: 80%;">
+  <div style="margin-top: 20px; width: 80%">
     <mat-card class="example-card" appearance="outlined">
       <mat-card-header>
         <mat-card-title>Location Found</mat-card-title>
-        <mat-card-subtitle>Latitude: {{ markerPosition.lat }},  Longitude:  {{ markerPosition.lng }}</mat-card-subtitle>
+        <mat-card-subtitle
+          >Latitude: {{ markerPosition.lat }}, Longitude:
+          {{ markerPosition.lng }}</mat-card-subtitle
+        >
       </mat-card-header>
-    
-      <mat-card-content >
-        <google-map 
-        height="500px"
-        width="100%"
-        [options]="options">
-          <map-advanced-marker #markElem="mapAdvancedMarker" [position]="{lat: markerPosition.lat, lng: markerPosition.lng}"></map-advanced-marker>
+
+      <mat-card-content>
+        <google-map height="500px" width="100%" [options]="options">
+          <map-advanced-marker
+            #markElem="mapAdvancedMarker"
+            [position]="{ lat: markerPosition.lat, lng: markerPosition.lng }"
+            (mapClick)="showAddress(cellInfo, markElem)"
+          ></map-advanced-marker>
+          <!-- Single info window outside the loop -->
+          <map-info-window
+            #infoWindow="mapInfoWindow"
+            (closeclick)="infoWindowVisible = false"
+          >
+            <div>
+              <h2>{{ selectedMarkerData?.address || 'Location' }}</h2>
+              <p>
+                Lat: {{ selectedMarkerData?.latitude }}, Lng:
+                {{ selectedMarkerData?.longitude }}
+              </p>
+            </div>
+          </map-info-window>
         </google-map>
       </mat-card-content>
     </mat-card>
