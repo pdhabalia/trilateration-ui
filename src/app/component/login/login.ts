@@ -18,23 +18,14 @@ import { MatMenuModule } from '@angular/material/menu'
 import { MatSelectModule } from '@angular/material/select'
 import { MatTableModule } from '@angular/material/table'
 import { MatToolbarModule } from '@angular/material/toolbar'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-login',
   imports: [
-    FormsModule,
     ReactiveFormsModule,
-    MatToolbarModule,
-    MatInputModule,
-    MatCardModule,
-    MatMenuModule,
     MatIconModule,
-    MatButtonModule,
-    MatTableModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatError,
     CommonModule
   ],
   templateUrl: './login.html',
@@ -42,11 +33,12 @@ import { CommonModule } from '@angular/common'
 })
 export class Login {
   isLoginValid: boolean = true
+  hidePassword: boolean = true
+  isLoading: boolean = false
 
   form = new FormGroup({
     username: new FormControl<string>('', [
-      Validators.required//,
-     // Validators.email
+      Validators.required
     ]),
     password: new FormControl<string | null>(null, [Validators.required])
   })
@@ -57,21 +49,25 @@ export class Login {
   ) {}
 
   async onLogin () {
-    if (this.form.valid) {
-      //const username = this.form.get('username')?.value;
-      let username = this.form.get('username')?.value ;
-      let password = this.form.get('password')?.value;
+    if (this.form.valid && !this.isLoading) {
+      this.isLoading = true
+      this.isLoginValid = true
 
-      username = username == null ? '' : username;
-      password = password == null ? '' : password;
+      let username = this.form.get('username')?.value
+      let password = this.form.get('password')?.value
 
-      try{
-         await this.authenticationService.login(username, password);
-      } catch(error){
-        this.isLoginValid = false;
-        return;
+      username = username == null ? '' : username.trim()
+      password = password == null ? '' : password
+
+      try {
+        await this.authenticationService.login(username, password)
+        this.router.navigate(['/history'])
+      } catch(error) {
+        console.error('Login error:', error)
+        this.isLoginValid = false
+      } finally {
+        this.isLoading = false
       }
-      this.router.navigate(['/history'])
     }
   }
 }

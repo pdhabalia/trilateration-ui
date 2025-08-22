@@ -17,16 +17,28 @@
 
       <!-- Desktop navigation links -->
       <nav class="desktop-nav">
-        <button mat-button>Home</button>
-        <button mat-button>About</button>
-        <button mat-button>Services</button>
-        <button mat-button>Contact</button>
+        <button mat-button (click)="navigateToLocation()">
+          <mat-icon>location_on</mat-icon>
+          Find Location
+        </button>
+        <button mat-button (click)="navigateToHistory()">
+          <mat-icon>history</mat-icon>
+          History
+        </button>
       </nav>
 
-      <!-- User profile/action button -->
-      <button mat-icon-button class="user-button">
+      <!-- User profile/action button with menu -->
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-button">
         <mat-icon>account_circle</mat-icon>
       </button>
+
+      <!-- User menu -->
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
     </mat-toolbar>
 
     <!-- Side navigation for mobile view 

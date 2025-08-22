@@ -5,10 +5,10 @@ import { Login } from './component/login/login';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-
     {
         path: '',
-        component: Login
+        redirectTo: '/login',
+        pathMatch: 'full'
     },
     {
         path: 'location',
@@ -24,4 +24,8 @@ export const routes: Routes = [
         path: 'login',
         component: Login
     },
+    {
+        path: '**',
+        redirectTo: '/login'
+    }
 ];

@@ -1,0 +1,238 @@
+// History Container with transparent background to show gradient
+.history-container {
+  min-height: 100vh;
+  background: transparent;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+// Navigation Menu
+.navigation-menu {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+
+  .nav-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// Form Section - solid white background
+.form-section {
+  .form-card {
+    background: #ffffff !important;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .form-header {
+    margin-bottom: 30px;
+    text-align: center;
+
+    .form-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #333333;
+      margin: 0;
+    }
+  }
+}
+
+// Selection Form
+.selection-form {
+  .form-group {
+    margin-bottom: 25px;
+
+    .field-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: #666666;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .phone-select {
+      width: 100%;
+
+      .mat-mdc-form-field-wrapper {
+        background: #f8f9fa;
+        border-radius: 4px 4px 0 0;
+        border-bottom: 2px solid #ddd;
+        transition: all 0.3s ease;
+
+        &:focus-within {
+          background: #ffffff;
+          border-bottom-color: #007bff;
+          box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
+        }
+      }
+    }
+  }
+
+  .form-actions {
+    text-align: center;
+    margin-top: 20px;
+
+    .center-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-weight: 500;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  .loading-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+
+    .loading-text {
+      font-size: 14px;
+      color: #666666;
+      font-weight: 500;
+    }
+  }
+}
+
+// Map Section
+.map-section {
+  .map-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+  }
+
+  .map-header {
+    margin-bottom: 20px;
+    text-align: center;
+
+    .map-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333333;
+      margin: 0 0 10px 0;
+    }
+
+    .location-count {
+      font-size: 14px;
+      color: #666666;
+
+      .count-label {
+        font-weight: 500;
+      }
+
+      .count-value {
+        font-weight: 600;
+        color: #007bff;
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .map-container {
+    .location-map {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// Info Window Styling
+.info-window-content {
+  padding: 16px;
+  min-width: 280px;
+
+  .info-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+    margin: 0 0 12px 0;
+  }
+
+  .info-details {
+    p {
+      margin: 6px 0;
+      font-size: 14px;
+      color: #495057;
+      line-height: 1.4;
+
+      strong {
+        color: #212529;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .history-container {
+    padding: 20px 15px;
+  }
+
+  .content-wrapper {
+    max-width: 100%;
+  }
+
+  .form-section .form-card {
+    padding: 20px;
+  }
+
+  .map-section .map-card {
+    padding: 15px;
+  }
+
+  .navigation-menu {
+    flex-direction: column;
+    gap: 10px;
+
+    .nav-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .selection-form .form-actions {
+    margin-top: 15px;
+
+    .center-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
