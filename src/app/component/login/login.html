@@ -1,47 +1,90 @@
-<mat-card>
-  <mat-card-content>
-    <form [formGroup]="form" (submit)="onLogin()">
-      <div>
-        <h2>Log In</h2>
-        @if (!isLoginValid) {
-        <mat-error> The username and password were not recognized </mat-error>
-        }
+<div class="login-container">
+  <div class="login-background">
+    <div class="background-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+  </div>
+
+  <div class="login-content">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo-container">
+          <mat-icon class="logo-icon">location_on</mat-icon>
+        </div>
+        <h1 class="app-title">Mobile Tracker</h1>
+        <p class="app-subtitle">Secure Location Intelligence Platform</p>
       </div>
 
-      <div>
-        <mat-form-field class="example-form-field">
-          <mat-label>Email</mat-label>
+      <form [formGroup]="form" (submit)="onLogin()" class="login-form">
+        @if (!isLoginValid) {
+          <div class="error-container">
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <span class="error-message">Invalid credentials. Please check your username and password.</span>
+          </div>
+        }
+
+        <div class="form-group">
+          <label class="field-label">Username *</label>
           <input
-            matInput
-            placeholder="Email"
-            type="string"
+            class="form-input"
+            placeholder="Enter your username"
+            type="text"
             required
-            #email
             formControlName="username"
             name="username"
+            autocomplete="username"
           />
-        </mat-form-field>
-      </div>
+          @if (form.get('username')?.hasError('required') && form.get('username')?.touched) {
+            <div class="error-message">Username is required</div>
+          }
+        </div>
 
-      <div>
-        <mat-form-field>
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            type="password"
-            required
-            placeholder="Password"
-            formControlName="password"
-            name="password"
-          />
-        </mat-form-field>
-      </div>
+        <div class="form-group">
+          <label class="field-label">Password *</label>
+          <div class="password-input-container">
+            <input
+              class="form-input password-input"
+              [type]="hidePassword ? 'password' : 'text'"
+              required
+              placeholder="Enter your password"
+              formControlName="password"
+              name="password"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="hidePassword = !hidePassword"
+              [attr.aria-label]="'Toggle password visibility'"
+            >
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </div>
+          @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+            <div class="error-message">Password is required</div>
+          }
+        </div>
 
-      <div>
-        <button mat-raised-button color="primary" [disabled]="!form.valid">
-          Login
-        </button>
-      </div>
-    </form>
-  </mat-card-content>
-</mat-card>
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="find-button login-button"
+            [disabled]="!form.valid || isLoading"
+          >
+            @if (isLoading) {
+              <mat-icon>hourglass_empty</mat-icon>
+              <span>Signing In...</span>
+            } @else {
+              <mat-icon>login</mat-icon>
+              <span>Sign In</span>
+            }
+          </button>
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+</div>

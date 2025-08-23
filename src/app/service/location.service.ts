@@ -48,7 +48,13 @@ export class LocationService {
     const url = `${this.apiUrl}/phoneNumbers`;
     console.log("URL " , url);
     try {
-      return await firstValueFrom(this.http.get<PhoneNumbers>(url));
+      const response = await firstValueFrom(this.http.get<any>(url));
+      console.log('Raw API response:', response);
+      console.log('Response type:', typeof response);
+      console.log('Response keys:', Object.keys(response || {}));
+
+      // Return the response as-is for now, let the component handle the parsing
+      return response;
     } catch (error) {
       console.log('Could not fetch the phone numbers', error);
       throw error;
