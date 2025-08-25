@@ -1,43 +1,22 @@
-$toolbar-height: 64px;
-
-.main-header {
-  z-index: 1000;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin-bottom: 50px;
-  background-color: rgb(132, 183, 166);
-
-  .app-title {
-    font-weight: 500;
-    font-size: 1.25rem;
-  }
-
-  .toolbar-spacer {
-    flex: 1 1 auto;
-  }
-
-  /* Mobile styles by default */
-  .desktop-nav, .user-button {
-    display: none;
-  }
-
-  .menu-button-mobile {
-    display: block;
-  }
+.mat-toolbar {
+  background-color: transparent!important;
 }
 
-
-/* Media query for tablet and desktop sizes */
-@media (min-width: 768px) {
-  .main-header {
-    .menu-button-mobile {
-      display: none;
-    }
-
-    .desktop-nav, .user-button {
-      display: block;
-    }
-  }
+.toolbar-spacer {
+  flex: 1 1 auto;
 }
+
+// User info styling
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 14px;
+}
+
+// Navigation buttons
+nav {
+  background-color: #ffffff!important;
+}
+

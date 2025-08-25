@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -21,16 +21,26 @@ import { Router } from '@angular/router';
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
-export class Header {
+export class Header implements OnInit{
+  // Use computed signal to reactively track authentication status
+  showIcon = computed(() => {
+    const user = this.authService.user();
+    return user !== null && this.authService.isAuthenticated();
+  });
 
+  // Get current user information
+  currentUser = computed(() => this.authService.user());
   constructor(
     private authService: AuthenticationService,
     private router: Router
   ) {}
-
+  ngOnInit () {
+    // No need to set showIcon here anymore - it's reactive
+  }
   async logout() {
     try {
       await this.authService.logout();
+      // The showIcon computed signal will automatically update when user signal changes
     } catch (error) {
       console.error('Logout error:', error);
       // Force logout even if server call fails

@@ -1,54 +1,15 @@
-<!-- Main toolbar for desktop view -->
-    <mat-toolbar color="primary" class="main-header">
-      <!-- Menu button for mobile 
-      <button mat-icon-button (click)="sidenav.toggle()" class="menu-button-mobile">
-        <mat-icon>menu</mat-icon>
-      </button>-->
-
-      <button mat-icon-button  class="menu-button-mobile">
-        <mat-icon>menu</mat-icon>
-      </button>
-
-      <!-- App title -->
-      <span class="app-title">My Awesome App</span>
-
+@if (showIcon()) {
+    <mat-toolbar>
+    
       <!-- Spacer to push items to the right -->
       <span class="toolbar-spacer"></span>
 
-      <!-- Desktop navigation links -->
-      <nav class="desktop-nav">
-        <button mat-button (click)="navigateToLocation()">
-          <mat-icon>location_on</mat-icon>
-          Find Location
-        </button>
-        <button mat-button (click)="navigateToHistory()">
-          <mat-icon>history</mat-icon>
-          History
+      <nav>
+        <!-- Logout button -->
+        <button mat-button (click)="logout()" matTooltip="Sign out">
+          <mat-icon>logout</mat-icon>
+          Logout
         </button>
       </nav>
-
-      <!-- User profile/action button with menu -->
-      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-button">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-
-      <!-- User menu -->
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          <span>Logout</span>
-        </button>
-      </mat-menu>
-    </mat-toolbar>
-
-    <!-- Side navigation for mobile view 
-    <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav #sidenav mode="over" class="mobile-nav">
-        <mat-nav-list (click)="sidenav.close()">
-          <a mat-list-item>Home</a>
-          <a mat-list-item>About</a>
-          <a mat-list-item>Services</a>
-          <a mat-list-item>Contact</a>
-        </mat-nav-list>
-      </mat-sidenav>
-    </mat-sidenav-container>-->
+</mat-toolbar>
+}

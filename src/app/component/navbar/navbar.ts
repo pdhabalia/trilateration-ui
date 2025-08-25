@@ -4,7 +4,7 @@ import { MatListModule } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-navbar',
-  imports: [MatSidenavModule, MatListModule, RouterLink],
+  imports: [MatSidenavModule, MatListModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })

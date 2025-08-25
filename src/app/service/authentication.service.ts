@@ -86,7 +86,7 @@ export class AuthenticationService {
     return localStorage.getItem('jwt');
   }
 
-  async logout(callServer: boolean = true): Promise<void> {
+  /*async logout(callServer: boolean = true): Promise<void> {
     if (callServer) {
       try {
         // Call server logout endpoint to invalidate token
@@ -100,8 +100,15 @@ export class AuthenticationService {
 
     this.clearUserData();
     this.router.navigate(['/login']);
-  }
+  }*/
 
+  logout(): void {
+    this.token = null;
+    this.user.set(null);
+    localStorage.removeItem('jwt');
+    this.router.navigate(['/login']);
+  }
+    
   isAuthenticated(): boolean {
     const token = this.getToken();
     if (!token) {
@@ -226,7 +233,7 @@ export class AuthenticationService {
     this.clearSessionTimeout();
     this.sessionTimeoutId = window.setTimeout(() => {
       console.warn('Session timeout - logging out user');
-      this.logout(false); // Don't call server on timeout
+      this.logout(); // Don't call server on timeout
     }, this.SESSION_TIMEOUT);
   }
 
