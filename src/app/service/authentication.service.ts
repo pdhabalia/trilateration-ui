@@ -86,7 +86,7 @@ export class AuthenticationService {
     return localStorage.getItem('jwt');
   }
 
-  /*async logout(callServer: boolean = true): Promise<void> {
+  async logout(callServer: boolean = true): Promise<void> {
     if (callServer) {
       try {
         // Call server logout endpoint to invalidate token
@@ -99,13 +99,6 @@ export class AuthenticationService {
     }
 
     this.clearUserData();
-    this.router.navigate(['/login']);
-  }*/
-
-  logout(): void {
-    this.token = null;
-    this.user.set(null);
-    localStorage.removeItem('jwt');
     this.router.navigate(['/login']);
   }
     

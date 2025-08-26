@@ -16,7 +16,7 @@ import {
   MatSelectTrigger,
   MatOption
 } from '@angular/material/select'
-import { RouterLink } from '@angular/router'
+
 import { LocationService } from '../../service/location.service'
 import { delay } from 'rxjs'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
@@ -37,8 +37,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
     MatSelect,
     MatOption,
     MatTooltipModule,
-    MatProgressSpinnerModule,
-    RouterLink
+    MatProgressSpinnerModule
   ],
   templateUrl: './history.html',
   styleUrl: './history.scss'
@@ -61,8 +60,16 @@ export class History implements OnInit {
 
   options: google.maps.MapOptions = {
     mapId: 'Cell-Location-Id',
-    center: { lat: 0, lng: 0 },
-    zoom: 4
+    center: { lat: 39.8283, lng: -98.5795 }, // Center of USA for better default view
+    zoom: 4,
+    gestureHandling: 'auto',
+    zoomControl: true,
+    mapTypeControl: true,
+    scaleControl: true,
+    streetViewControl: false,
+    rotateControl: false,
+    fullscreenControl: true,
+    disableDefaultUI: false
   }
 
   private calculateMapCenter(locations: PhoneLocation[]): google.maps.LatLngLiteral {
@@ -112,31 +119,49 @@ export class History implements OnInit {
 
   private centerMapOnMarkers(): void {
     if (!this.googleMap || this.phoneLocations.length === 0) {
+      console.log('Cannot center map: no map instance or no locations');
       return;
     }
 
-    const bounds = new google.maps.LatLngBounds();
+    try {
+      const bounds = new google.maps.LatLngBounds();
 
-    // Add all marker positions to bounds
-    this.phoneLocations.forEach(location => {
-      bounds.extend({ lat: location.latitude, lng: location.longitude });
-    });
-
-    // Fit the map to show all markers
-    this.googleMap.fitBounds(bounds);
-
-    // For single marker, set a reasonable zoom level
-    if (this.phoneLocations.length === 1) {
-      // Wait for fitBounds to complete, then set zoom
-      setTimeout(() => {
-        if (this.googleMap.googleMap) {
-          this.googleMap.googleMap.setZoom(15);
+      // Add all marker positions to bounds
+      this.phoneLocations.forEach(location => {
+        if (location.latitude && location.longitude) {
+          bounds.extend({ lat: location.latitude, lng: location.longitude });
         }
-      }, 100);
+      });
+
+      // Check if bounds is valid
+      if (bounds.isEmpty()) {
+        console.log('No valid coordinates found');
+        return;
+      }
+
+      // Fit the map to show all markers
+      this.googleMap.fitBounds(bounds);
+
+      // For single marker, set a reasonable zoom level
+      if (this.phoneLocations.length === 1) {
+        // Wait for fitBounds to complete, then set zoom
+        setTimeout(() => {
+          if (this.googleMap?.googleMap) {
+            this.googleMap.googleMap.setZoom(15);
+            console.log('Set zoom to 15 for single marker');
+          }
+        }, 200);
+      } else {
+        console.log(`Centered map on ${this.phoneLocations.length} markers`);
+      }
+    } catch (error) {
+      console.error('Error centering map on markers:', error);
     }
   }
 
   constructor (private locationService: LocationService) {}
+
+
 
   async ngOnInit () {
     console.log('History component initializing...');
@@ -234,7 +259,7 @@ export class History implements OnInit {
         // Use setTimeout to ensure the map is rendered before fitting bounds
         setTimeout(() => {
           this.centerMapOnMarkers();
-        }, 100);
+        }, 300); // Increased timeout for better reliability
       }
     } catch (error) {
       console.error('Error fetching phone locations:', error);

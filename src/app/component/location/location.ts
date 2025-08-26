@@ -18,7 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatIconModule } from '@angular/material/icon'
 import { MatInputModule } from '@angular/material/input'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
-import { RouterLink } from '@angular/router'
+
 import { LocationService } from '../../service/location.service'
 import { PhoneLocation } from '../../model/cell-location.model'
 
@@ -36,8 +36,7 @@ import { PhoneLocation } from '../../model/cell-location.model'
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatProgressSpinnerModule,
-    RouterLink
+    MatProgressSpinnerModule
   ],
   templateUrl: './location.html',
   styleUrl: './location.scss'
@@ -124,4 +123,5 @@ export class Location {
       this.infoWindowVisible = true
     }
   }
+
 }

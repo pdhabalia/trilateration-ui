@@ -1,16 +1,5 @@
 <div class="history-container">
   <div class="content-wrapper">
-    <!-- Navigation Menu -->
-    <div class="navigation-menu">
-      <button mat-raised-button color="primary" routerLink="/location" class="nav-button">
-        <mat-icon>location_on</mat-icon>
-        Find Location
-      </button>
-      <button mat-raised-button routerLink="/history" class="nav-button">
-        <mat-icon>history</mat-icon>
-        History
-      </button>
-    </div>
 
     <!-- Form Section -->
     <div class="form-section">
@@ -61,26 +50,52 @@
       <div class="map-section">
         <div class="map-card">
           <div class="map-header">
-            <h3 class="map-title">Location History</h3>
-            <div class="location-count">
-              <span class="count-label">Locations found:</span>
-              <span class="count-value">{{ phoneLocations.length }}</span>
+            <div class="map-title-section">
+              <h3 class="map-title">Location History</h3>
+              <div class="location-count">
+                <span class="count-label">Locations found:</span>
+                <span class="count-value">{{ phoneLocations.length }}</span>
+              </div>
+            </div>
+            <div class="map-actions">
+              <button mat-icon-button
+                      (click)="resetMapView()"
+                      matTooltip="Reset map view to show all locations"
+                      class="reset-view-btn">
+                <mat-icon>center_focus_strong</mat-icon>
+              </button>
             </div>
           </div>
 
           <div class="map-container">
+            <!-- Loading overlay -->
+            @if (loading()) {
+              <div class="map-loading-state">
+                <mat-spinner diameter="40"></mat-spinner>
+                <h3>Loading Location Data...</h3>
+                <p>Please wait while we fetch the location history</p>
+              </div>
+            }
+
+            <!-- Empty state overlay -->
+            @if (phoneLocations.length === 0 && !loading()) {
+              <div class="map-empty-state">
+                <mat-icon class="empty-icon">location_off</mat-icon>
+                <h3>No Location Data</h3>
+                <p>Select a phone number above to view location history on the map</p>
+              </div>
+            }
+
             <google-map
-              height="500px"
-              width="100%"
               [options]="options"
+              [height]="'100%'"
+              [width]="'100%'"
               class="location-map">
               @for(marker of phoneLocations; track marker; let i = $index){
                 <map-advanced-marker #markElem="mapAdvancedMarker"
                 [position]="{lat: marker.latitude, lng: marker.longitude}"
                 (mapClick)="showAddress(marker, markElem)"
                 ></map-advanced-marker>
-              } @empty{
-                <map-advanced-marker #markElem="mapAdvancedMarker" [position]="{lat: 0, lng: 0}"></map-advanced-marker>
               }
 
               <!-- Single info window outside the loop -->

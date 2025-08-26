@@ -1,11 +1,31 @@
+// Global override for Google Maps sizing issues
+:host ::ng-deep {
+  google-map {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+
+    > div {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    div[style] {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+}
+
 // History Container with transparent background to show gradient
 .history-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 80px); // Account for header height + margin
   background: transparent;
   padding: 40px 20px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  margin-top: 16px; // Additional margin from header
 }
 
 .content-wrapper {
@@ -16,27 +36,6 @@
   gap: 30px;
 }
 
-// Navigation Menu
-.navigation-menu {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
-
-  .nav-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    font-weight: 500;
-
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
-  }
-}
 
 // Form Section - solid white background
 .form-section {
@@ -138,36 +137,151 @@
 
   .map-header {
     margin-bottom: 20px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-    .map-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: #333333;
-      margin: 0 0 10px 0;
-    }
+    .map-title-section {
+      text-align: left;
 
-    .location-count {
-      font-size: 14px;
-      color: #666666;
-
-      .count-label {
-        font-weight: 500;
+      .map-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333333;
+        margin: 0 0 10px 0;
       }
 
-      .count-value {
-        font-weight: 600;
+      .location-count {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+
+        .count-label {
+          color: #666666;
+          font-weight: 500;
+        }
+
+        .count-value {
+          background: #007bff;
+          color: white;
+          padding: 4px 12px;
+          border-radius: 12px;
+          font-weight: 600;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .map-actions {
+      display: flex;
+      gap: 8px;
+
+      .reset-view-btn {
         color: #007bff;
-        margin-left: 5px;
+
+        &:hover {
+          background-color: rgba(0, 123, 255, 0.1);
+        }
       }
     }
   }
 
   .map-container {
+    width: 100% !important;
+    height: 65vh !important; // Increased viewport height for better visibility
+    min-height: 450px !important; // Slightly larger minimum height
+    max-height: 700px !important; // Increased maximum height
+    display: block !important; // Force block display
+    position: relative; // For absolute positioning of empty state
+
+    .map-loading-state,
+    .map-empty-state {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(5px);
+
+      h3 {
+        margin: 0 0 0.5rem 0;
+        color: #424242;
+        font-weight: 500;
+      }
+
+      p {
+        margin: 0;
+        color: #757575;
+        font-size: 0.9rem;
+      }
+    }
+
+    .map-loading-state {
+      mat-spinner {
+        margin: 0 auto 1rem auto;
+      }
+    }
+
+    .map-empty-state {
+      .empty-icon {
+        font-size: 3rem;
+        width: 3rem;
+        height: 3rem;
+        color: #9e9e9e;
+        margin-bottom: 1rem;
+      }
+    }
+
     .location-map {
+      width: 100% !important;
+      height: 100% !important;
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: block !important; // Force block display
+    }
+
+    // Target the actual Google Maps div with more specificity
+    google-map {
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+
+      div {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      // Specifically target zoom controls
+      .gm-bundled-control .gm-bundled-control-inner {
+        display: block !important;
+      }
+
+      // Make sure the map container doesn't interfere with controls
+      .gm-style {
+        position: relative !important;
+      }
+
+      // Target the inner Google Maps container
+      > div {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      // Target any nested divs that might be the actual map container
+      div[style*="height"] {
+        height: 100% !important;
+      }
+
+      div[style*="width"] {
+        width: 100% !important;
+      }
     }
   }
 }
@@ -213,19 +327,19 @@
     padding: 20px;
   }
 
-  .map-section .map-card {
-    padding: 15px;
-  }
+  .map-section {
+    .map-card {
+      padding: 15px;
+    }
 
-  .navigation-menu {
-    flex-direction: column;
-    gap: 10px;
-
-    .nav-button {
-      width: 100%;
-      justify-content: center;
+    .map-container {
+      height: 50vh !important; // Smaller height on mobile
+      min-height: 300px !important;
+      max-height: 400px !important;
     }
   }
+
+
 
   .selection-form .form-actions {
     margin-top: 15px;
@@ -234,5 +348,23 @@
       width: 100%;
       justify-content: center;
     }
+  }
+}
+
+// Large screens - give more space to the map
+@media (min-width: 1200px) {
+  .map-section .map-container {
+    height: 75vh !important;
+    max-height: 900px !important;
+    min-height: 500px !important;
+  }
+}
+
+// Medium screens
+@media (min-width: 769px) and (max-width: 1199px) {
+  .map-section .map-container {
+    height: 70vh !important;
+    max-height: 750px !important;
+    min-height: 450px !important;
   }
 }

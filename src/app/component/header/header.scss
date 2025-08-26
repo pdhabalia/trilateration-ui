@@ -1,22 +1,146 @@
-.mat-toolbar {
-  background-color: transparent!important;
-}
+$toolbar-height: 64px;
 
-.toolbar-spacer {
-  flex: 1 1 auto;
-}
-
-// User info styling
-.user-info {
+.main-header {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-bottom: 50px;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  height: 64px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #666;
-  font-size: 14px;
+  justify-content: space-between;
+  padding: 0 16px;
+
+  .app-title {
+    font-weight: 500;
+    font-size: 1.25rem;
+    color: #ffffff !important;
+    flex-shrink: 0;
+  }
+
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
+
+  // Desktop navigation - centered
+  .desktop-nav {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+
+    .nav-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-weight: 500;
+      text-transform: none;
+      font-size: 14px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+
+      &[color="primary"] {
+        background-color: #007bff !important;
+        color: white !important;
+
+        &:hover {
+          background-color: #0056b3 !important;
+        }
+      }
+
+      &:not([color="primary"]) {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+      }
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      &.active-nav {
+        background-color: #007bff !important;
+        color: white !important;
+        border: 1px solid #007bff !important;
+
+        &:hover {
+          background-color: #0056b3 !important;
+        }
+      }
+    }
+  }
+
+  // Logout button - right aligned
+  .logout-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-weight: 500;
+    text-transform: none;
+    font-size: 14px;
+    border-radius: 20px;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    &:hover {
+      background-color: #f8f9fa !important;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+    }
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #000000 !important;
+    }
+  }
+
+  // Mobile menu button
+  .menu-button-mobile {
+    color: #ffffff !important;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+
+  /* Mobile styles by default */
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-button-mobile {
+    display: block;
+  }
 }
 
-// Navigation buttons
-nav {
-  background-color: #ffffff!important;
+/* Media query for tablet and desktop sizes */
+@media (min-width: 768px) {
+  .main-header {
+    .menu-button-mobile {
+      display: none;
+    }
+
+    .desktop-nav {
+      display: flex;
+    }
+  }
 }
 

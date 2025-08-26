@@ -1,11 +1,12 @@
 // Location Container with transparent background to show gradient
 .location-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 80px); // Account for header height + margin
   background: transparent;
   padding: 40px 20px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  margin-top: 16px; // Additional margin from header
 }
 
 .content-wrapper {
@@ -16,27 +17,7 @@
   gap: 30px;
 }
 
-// Navigation Menu
-.navigation-menu {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
 
-  .nav-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    font-weight: 500;
-
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
-  }
-}
 
 // Form Section - solid white background
 .form-section {
